@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【半導體-記憶體】3D NAND在z方向的截距縮放</title> 
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* 📌 樣式名稱已更改，並調整為 Blog 文章的背景圖 */
+        .blog-hero-bg {
+            background: linear-gradient(rgba(31, 41, 55, 0.85), rgba(31, 41, 55, 0.75)), 
+                        url('Images/Blogs_cover.jpg'); /* 請確認您的圖片路徑正確 */
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+        }
+        /* 移除 iframe 相關的 CSS 樣式，因為文章頁面不再需要 */
+    </style>
+</head>
+<body class="bg-gray-50">
+
+<header class="sticky top-0 z-50 bg-white shadow-md">
+<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-indigo-700">
+        <a href="../index.html" class="flex items-center space-x-2">
+            <img src="../Images/Logo_vector.svg" alt="AtomSolve Logo" class="h-12 w-12 rounded-lg">
+            <span>元析科技 | AtomSolve</span>
+        </a>
+    </div>
+
+    <div class="hidden md:flex space-x-8">
+        <a href="../index.html" class="text-gray-600 hover:text-indigo-600">主頁 (Home)</a>
+        <a href="../about.html" class="text-gray-600 hover:text-indigo-600">關於元析 (About)</a>
+        <a href="../blogs.html" class="text-indigo-600 font-semibold border-b-2 border-indigo-600">技術部落格 (Blog)</a>
+        <a href="../contact.html" class="text-gray-600 hover:text-indigo-600">聯繫我們 (Contact)</a>
+    </div>
+
+    <button id="mobile-menu-button" class="md:hidden text-gray-600 p-2 rounded-md hover:text-indigo-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+</nav>
+
+<div id="mobile-menu" class="hidden md:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg border-t border-gray-100">
+        <a href="../index.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">主頁 (Home)</a>
+        <a href="../about.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">關於元析 (About)</a>
+        <a href="../blogs.html" class="block px-3 py-2 rounded-md text-indigo-700 bg-indigo-50">技術部落格 (Blog)</a>
+        <a href="../contact.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">聯繫我們 (Contact)</a>
+    </div>
+</div>
+</header>
+
+<main>
+<section class="blog-hero-bg flex items-center justify-center text-white text-center">
+    <div class="p-4">
+        <h1 class="text-4xl font-extrabold mb-4">為次世代 3D NAND 快閃記憶體解鎖 z 向節距縮放能力</h1>
+        <div class="text-lg font-light opacity-90 space-x-4">
+            <span>作者: imec</span>
+            <span>|</span>
+            <span>日期: 2025年11月07日</span>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <article class="prose lg:prose-xl max-w-none text-gray-700">
+
+
+    <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">NAND 快閃記憶體：產業中的主要儲存技術</h2>
+
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">自 1980 年代後期進入記憶體市場以來，NAND 快閃記憶體徹底改變了我們儲存與讀取大量資料的方式。這項廣受歡迎的記憶體技術在架構上經過最佳化，適合高密度資料儲存，並廣泛應用於所有主要電子終端產品市場，包括智慧型手機、資料伺服器與個人電腦。你也能在大多數可拆卸式與攜帶式記憶裝置中找到它，例如 SD 卡與 USB 隨身碟。NAND 屬於非揮發性記憶體，可讓照片、影片、音訊檔案、封存郵件及其他文件得以儲存並可在長達十年間被讀取。最近，NAND 快閃記憶體在 AI 與機器學習中也扮演了重要角色，例如為訓練 AI 模型所需的海量資料提供高效率的儲存空間。NAND 快閃記憶體之所以成功，源自於其持續提升記憶體單元密度與降低成本的能力。多年來，NAND 產業大幅提升位元儲存密度（通常以 Gbit/mm² 表示）。為了維持這個進步趨勢，業界已導入多項創新技術，包括：從 2D NAND 過渡到 3D NAND、提高每個記憶單元可儲存的位元數（商用 NAND 已可達四位元），以及從浮動閘極電晶體轉向採用電荷捕捉式記憶單元等，這些都是最重要的技術演進。</p>
+
+    <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">3D 全環繞閘極（GAA）記憶單元架構：NAND 快閃記憶體產業的主力技術</h2>
+
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">具備全包覆閘極（GAA）垂直架構的 3D NAND 快閃記憶體，是當今高密度資料儲存應用的主力技術。在此 3D 架構中，記憶體單元以垂直方式堆疊，形成一條垂直字串，而單元則透過水平字線（word-line）進行選址與操作。在大多數的 3D NAND 產品中，採用電荷捕捉（charge trap）記憶單元作為資料儲存元件。此記憶單元類似 MOSFET 電晶體，但在閘氧化層中加入一層薄的氮化矽（SiN），使得閘氧化層形成氧化物–氮化矽–氧化物（ONO）堆疊，分別作為阻擋氧化層、捕捉層與穿隧氧化層。SiN 層中含有大量可捕捉電荷的位置，可以用來儲存電子。當閘極施加正電壓時，通道區的電子會穿隧經過氧化層並被捕捉於 SiN 層中，使得電晶體的臨界電壓升高。要讀取記憶狀態時，則於 source/drain 兩端施加電壓進行測量：若偵測到電流流過，代表沒有電子被捕捉，此單元為「1」狀態；若偵測不到電流，則表示有電子被捕捉於記憶層中，屬於「0」狀態。</p>
+
+            <figure class="my-8">
+                <img 
+                    src="../BlogPics/251208-imecNAND-1.png" 
+                    alt="" 
+                    class="w-full h-auto rounded-lg shadow-lg mx-auto"
+                    style="max-width: 400px;" 
+                >
+                <figcaption class="mt-3 text-center text-sm text-gray-500 italic">
+                    圖 1: 3D NAND GAA（全包覆閘極）架構示意圖，顯示一條垂直的電荷捕捉（charge trap）記憶單元字串，包含氧化物–氮化矽–氧化物（ONO）閘極介電層與有限數量的字線（WL）。
+                </figcaption>
+            </figure>
+
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">在 3D NAND 結構中，電荷捕捉記憶單元是透過垂直通道的 GAA 方式來實現的。可以把它想像成將平面電晶體結構旋轉 90 度，使原本的多晶矽導電通道變成垂直方向，並由閘極堆疊層所包覆。GAA 的製程首先從成長一組矽氧化層／字線層（Si-oxide/word-line stack）開始。接著，利用先進的乾式蝕刻設備，在整個堆疊中垂直鑽孔形成圓柱狀孔洞。之後，在孔洞側壁上沉積氧化層、電荷捕捉層以及多晶矽通道。這種結構常被稱為 「通心麵（macaroni）通道」。</p>
+
+
+    <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">以更多氧化層／字線層延續 NAND flash 技術路線圖</h2>
+
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">未來幾年，記憶體產業將持續把基於 GAA 的 NAND flash 推向極限。目前主要廠商已能在產品中實現 超過 300 層的氧化層／字線堆疊。這個數字仍會持續提高，預計到 2030 年可達到約 1,000 層，相當於 100 Gbit/mm² 的儲存密度。然而，要在 約 30 µm 厚的堆疊結構中維持字串直徑一致，意味著加工的複雜度與成本不斷上升，尤其是在高縱橫比蝕刻與高厚度堆疊沉積等工藝上。因此，需要引入額外的「縮放增強技術（scaling boosters）」來持續推進技術節點，包括：</p> 
+
+            <ul class="list-disc pl-6 text-gray-700 mb-6">
+                <li>增加單元可儲存的位元數（如 TLC、QLC，甚至 PLC）。</li>
+                <li>減小 GAA 單元的 x-y 節距（平面方向縮放）。</li>
+                <li>提升記憶體陣列的面積效率。</li>
+                <li>模組堆疊技術（stacking modules）。</li>
+            </ul>
+
+             <p class="text-l leading-relaxed mb-6 [text-indent:2em]">另一個趨勢是 將周邊 CMOS 電路移至另一片晶圓上製作，再透過混合鍵合（hybrid bonding）技術與記憶體堆疊整合。為了控制不斷攀升的製程成本，也同時推動另一項關鍵縮放技術：在垂直方向縮小字線間距，即 z 向節距縮放（z-pitch scaling）。</p>
+
+            <figure class="my-8">
+                <img 
+                    src="../BlogPics/251208-imecNAND-2.png" 
+                    alt="" 
+                    class="w-full h-auto rounded-lg shadow-lg mx-auto"
+                    style="max-width: 400px;" 
+                >
+                <figcaption class="mt-3 text-center text-sm text-gray-500 italic">
+                    圖 2： 3D NAND flash GAA 結構示意圖，標示出相鄰字線之間的 z 向節距。
+                </figcaption>
+            </figure>
+
+    <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">z 向節距縮小（Z-pitch scaling）：優點與挑戰</h2>
+
+             <p class="text-l leading-relaxed mb-6 [text-indent:2em]">對於下一代多層堆疊、基於 GAA 的 3D NAND flash，z-pitch 縮放對維持成本下降至關重要。藉由縮小相鄰字線之間的節距（目前約 40nm），也就是同時減薄字線層與矽氧化層的厚度，便能在相同的堆疊高度內加入更多層數（因此也增加記憶單元數量），帶來顯著的成本效益。然而，若沒有額外的最佳化，實驗結果顯示 z-pitch 縮小會 負面影響記憶單元的電性表現，包含：臨界電壓下降、次臨界擺幅（sub-threshold swing）惡化、資料保持能力下降、Program / Erase 操作的所需電壓升高等。</p>
+                
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">這些效應主要來自兩種隨著縮放而更加突出的物理現象：單元間干擾（cell-to-cell interference）和橫向電荷遷移（lateral charge migration）。當字線層的厚度減少時，電荷捕捉電晶體的閘極長度縮短，閘極對通道的控制能力變弱，使相鄰記憶單元之間的靜電耦合更強，導致單元間干擾。另外，垂直方向尺寸縮小也會促進 電荷在氮化矽（SiN）記憶層中的上、下方向遷移（vertical / lateral charge migration），直接降低資料保持能力。以下段落將介紹可抑制這些效應、促進 z-pitch 缩小的關鍵技術。</p>
+
+    <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">在字線之間導入氣隙（airgap）以降低單元間干擾</h2>
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">TCAD 模擬顯示，在相鄰字線之間導入 氣隙（airgap） 是抑制單元間干擾的有效方法。氣隙的介電常數遠低於 Si-oxide，可顯著降低相鄰記憶單元的靜電耦合。此技術在早期的 2D NAND 產品中已非常成功。然而，要在高層堆疊的 Si-oxide/字線結構中形成氣隙則複雜許多。雖然已有一些方法被提出，但尚未證明具備足夠的可擴展性。在 2025 年 IEEE International Memory Workshop (IMW) 中，imec 提出一種可在字線間受控形成氣隙的獨特整合技術。其核心概念為：</p>
+            <ul class="list-disc pl-6 text-gray-700 mb-6">
+                <li>從 記憶孔（memory hole）內部引入氣隙</li>
+                <li>在沉積 ONO 堆疊之前，先刻蝕後退（recess）字線間的 Si-oxide</li>
+                <li>氣隙能 自對準（self-aligned）於字線</li>
+                <li>因此氣隙位置可精準控制，也具備可擴展性</li>
+            </ul>
+
+            <figure class="my-8">
+                <img 
+                    src="../BlogPics/251208-imecNAND-3.png" 
+                    alt="" 
+                    class="w-full h-auto rounded-lg shadow-lg mx-auto"
+                    style="max-width: 500px;" 
+                >
+                <figcaption class="mt-3 text-center text-sm text-gray-500 italic">
+                    圖 3：a–d）氣隙的 3D 整合製程流程；（e–f）於 2025 IMW 發表之氣隙 TEM 與 EDS 圖像。
+                </figcaption>
+            </figure>
+
+            <p class="text-l leading-relaxed mb-6 [text-indent:2em]">實驗證明，導入氣隙的元件比沒有氣隙的元件 更不易受到鄰近單元干擾。此結論來自以下測試：在未選取字線上施加通過電壓（pass voltage），觀察元件臨界電壓的偏移量，有氣隙的元件顯示出更小的臨界電壓偏移。測試是在以下結構上進行：限定的字線層數，30nm 節距（15nm 閘極長度 + 15nm Si-oxide 間隔），80nm 記憶孔直徑。imec 研究人員同時評估氣隙對記憶體操作與可靠度的影響。結果顯示：氣隙不影響記憶體運作，可達 1,000 次 program/erase endurance，與無氣隙元件相當。基於這些結果，在記憶孔側（hole-side）導入氣隙 被視為實現積極 z-pitch 縮放的關鍵一步。</p>
+
+            <figure class="my-8">
+                <img 
+                    src="../BlogPics/251208-imecNAND-4.png" 
+                    alt="" 
+                    class="w-full h-auto rounded-lg shadow-lg mx-auto"
+                    style="max-width: 500px;" 
+                >
+                <figcaption class="mt-3 text-center text-sm text-gray-500 italic">
+                    圖 4：在不同 pass voltage 下，具有氣隙（左）與無氣隙（右）的電荷捕捉元件臨界電壓變化（2025 IMW 所示）。
+                </figcaption>
+            </figure>
+
+     <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">導入電荷捕捉層分離以抑制橫向電荷遷移</h2>
+
+             <p class="text-l leading-relaxed mb-6 [text-indent:2em]">迄今為止，imec 已展示在字線間介電層中導入氣隙的可行性，且氣隙「終止」於 ONO 堆疊中的阻擋氧化層位置。TCAD 模擬顯示，若能將氣隙進一步延伸至 阻擋氧化層與 SiN 電荷捕捉層 之中，可進一步改善 記憶體視窗（memory window）。這樣的 電荷捕捉層分離（charge trap layer separation / charge trap cut） 還有另一項重要優勢：可防止儲存在記憶單元內的電荷，沿著整個氧化層／字線堆疊高度方向、透過垂直 SiN 串（SiN string）橫向遷移（vertical/lateral migration），進而大幅改善資料保持能力（retention）。然而，要實現此 charge trap cut 面臨極大挑戰需在 極深且狹窄的記憶孔側壁 進行高度方向性（directional）的蝕刻與沉積，現有用於平面（2D）NAND 的製程技術組合已不再適用。目前 imec 正與其設備供應鏈合作，開發新技術，以便能可控地實現此電荷捕捉層切割。一旦成功導入 charge trap cut，imec 研究人員計畫將其與氣隙整合方案結合，提供完整且可延伸的 z-pitch 縮放技術解決方案。</p>
+
+            <figure class="my-8">
+                <img 
+                    src="../BlogPics/251208-imecNAND-5.png" 
+                    alt="" 
+                    class="w-full h-auto rounded-lg shadow-lg mx-auto"
+                    style="max-width: 500px;" 
+                >
+                <figcaption class="mt-3 text-center text-sm text-gray-500 italic">
+                    圖 5：架構示意圖：（左）連續的閘極堆疊；（右）具備電荷捕捉層切割與氣隙整合的閘極堆疊。
+                </figcaption>
+            </figure>
+
+     <h2 class="text-xl font-bold text-gray-800 mt-10 mb-4 border-l-4 border-indigo-600 pl-3">結論與展望</h2>
+
+
+             <p class="text-l leading-relaxed mb-6 [text-indent:2em]">對於基於 GAA 的 3D NAND flash，z-pitch 縮放對控制因字線層數持續增加所帶來的製程成本至關重要。憑藉多年製程專業與強大的設備供應鏈，imec 正在開發兩項關鍵技術，以在維持記憶體操作與可靠度的前提下實現積極的 z-pitch 縮放：氣隙整合（airgap integration）和電荷捕捉層切割（charge trap cut）。然而，採用 GAA 電荷捕捉架構的 3D NAND 其密度提升終將趨於飽和。因此，全球研究團隊也正探索 2030 年後的顛覆性（disruptive）新型記憶體單元架構。例如有研究提出新的 3D 架構，使記憶單元的導電通道由垂直改為水平排列。imec 在 2023 IMW中提出另一種方法：以 槽型（trench-based）架構 連接電荷捕捉記憶單元，而非採用圓柱形 GAA 結構，可大幅提升位元儲存密度。這些技術趨勢顯示，業界已有多項解決方案在研發管線中，將逐步推動記憶體產業邁向 >100 Gbit/mm² 的資料儲存密度 —— 主要需求來自雲端運算與人工智慧（AI）應用。</p>
+
+        </article> 
+    </div>
+
+<section class="mt-8">
+  <h2 class="text-lg font-bold mb-4">原文鏈接：</h2>
+
+  <ol class="list-decimal pl-5">
+    <li>
+      
+        <a href="https://www.imec-int.com/en/articles/unlocking-z-pitch-scaling-next-generation-3d-nand-flash"
+          target="_blank"
+          class="text-indigo-600 hover:text-indigo-800 underline">
+          Unlocking z-pitch scaling for next-generation 3D NAND flash
+        </a>
+      
+    </li>
+  </ol>
+</section>
+
+
+</section>
+
+<footer id="contact" class="bg-gray-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-700 pb-8 mb-8">
+            
+            <div>
+                <h5 class="text-xl font-semibold mb-4 text-indigo-400">AtomSolve</h5>
+                <p class="text-sm text-gray-400">
+                    專注於微電子和材料科學領域，以精確的數據分析推動客戶創新與產品優化。
+                </p>
+            </div>
+
+            <div class="md:col-span-2">
+                <h5 class="text-xl font-semibold mb-4 text-indigo-400">聯繫資訊 (Contact Info)</h5>
+                <ul class="space-y-2 text-gray-400">
+                    <li>
+                        <strong class="font-medium text-white">地址:</strong> 717 台南市仁德區義林路256巷 168 號
+                    </li>
+                    <li>
+                        <strong class="font-medium text-white">電子郵件:</strong> 
+                        ytujimmy@gsrcg.com
+                    </li>
+                    <li>
+                        <strong class="font-medium text-white">電話:</strong> +886-930-691-282
+                    </li>
+                </ul>
+            </div>
+            
+            <div>
+                <h5 class="text-xl font-semibold mb-4 text-indigo-400">快捷連結</h5>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="index.html#services" class="hover:text-white transition duration-150">我們的服務</a></li>
+                    <li><a href="#" class="hover:text-white transition duration-150">隱私權政策</a></li>
+                    <li><a href="#" class="hover:text-white transition duration-150">加入我們</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="text-center text-sm text-gray-500 pt-4">
+            &copy; 2025 AtomSolve. All rights reserved.
+        </div>
+    </div>
+</footer>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 📌 Mobile menu toggle + auto-close
+    const button = document.getElementById("mobile-menu-button");
+    const menu = document.getElementById("mobile-menu");
+    button.addEventListener("click", () => menu.classList.toggle("hidden"));
+    document.querySelectorAll("#mobile-menu a").forEach(link => {
+        link.addEventListener("click", () => menu.classList.add("hidden"));
+    });
+});
+</script>
+
+</body>
+</html>
